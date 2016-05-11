@@ -1,10 +1,12 @@
 ---
 dependencies:
-  - kubernetes-common/flannel
   - kubernetes-master/certs
-  - kubernetes-master/flannel-config
+  - kubernetes-master/flannel
+  - kubernetes-master/kubelet-master
   - kubernetes-master/kube-apiserver
-  - kubernetes-master/kube-proxy-master
-  - kubernetes-master/kube-podmaster
-  - kubernetes-master/kube-controller-manager
+  - kubernetes-master/kube-proxy
+  - kubernetes-master/kube-controller
   - kubernetes-master/kube-scheduler
+  - kubernetes-master/calico
+  - kubernetes-master/policy-agent
+  - kubernetes-master/cni

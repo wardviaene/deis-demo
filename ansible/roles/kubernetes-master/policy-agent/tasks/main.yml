@@ -1,0 +1,2 @@
+- name: policy agent
+  template: src=policy-agent.yaml.j2 dest=/etc/kubernetes/manifests/policy-agent.yaml
