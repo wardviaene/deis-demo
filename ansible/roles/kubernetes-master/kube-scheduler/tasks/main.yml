@@ -1,2 +1,2 @@
 - name: kube-scheduler
-  template: src=kube-scheduler.yaml dest=/etc/kubernetes/manifests/kube-scheduler.yaml
+  template: src=kube-scheduler.yaml.j2 dest=/etc/kubernetes/manifests/kube-scheduler.yaml

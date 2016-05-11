@@ -1,7 +1,13 @@
 ---
+- name: Creating /etc/flannel
+  file: path=/etc/flannel state=directory mode=0755
+- name: Creating /etc/systemd/system/flanneld.service.d
+  file: path=/etc/systemd/system/flanneld.service.d state=directory mode=0755
 - name: flannel config
   template: src=../templates/options.env.j2 dest=/etc/flannel/options.env
 - name: flannel systemd
   template: src=../templates/40-ExecStartPre-symlink.conf.j2 dest=/etc/systemd/system/flanneld.service.d/40-ExecStartPre-symlink.conf
+- name: Creating /etc/systemd/system/docker.service.d/
+  file: path=/etc/systemd/system/docker.service.d/ state=directory mode=0755
 - name: flannel systemd (2)
   template: src=../templates/40-flannel.conf.j2 dest=/etc/systemd/system/docker.service.d/40-flannel.conf
