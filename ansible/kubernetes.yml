@@ -12,3 +12,7 @@
   roles:
     - etcd
     - kubernetes-master
+- hosts: kubernetes-worker
+  sudo: yes
+  roles:
+    - etcd
