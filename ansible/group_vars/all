@@ -1,0 +1,8 @@
+pod_network: 10.2.0.0/16
+service_ip_range: 10.3.0.0/24
+k8s_service_ip: 10.3.0.1
+dns_service_ip: 10.3.0.10
+ansible_ssh_user: core
+ansible_python_interpreter: "PATH=/home/core/bin:$PATH python"
+cert_dir: /home/core/certs
+kubernetes_workers: [ { host: deis-demo-1.example.com, ip: 127.0.0.1}, { host: deis-demo-2.example.com, ip: 127.0.0.2}, { host: deis-demo-3.example.com, ip: 127.0.0.3}]

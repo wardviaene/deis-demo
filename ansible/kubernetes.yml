@@ -1,0 +1,8 @@
+# file: kubernetes.yml
+- hosts: coreos
+  gather_facts: False
+  roles:
+    - defunctzombie.coreos-bootstrap
+- hosts: kubernetes-master
+  roles:
+    - kubernetes-master
