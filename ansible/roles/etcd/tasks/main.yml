@@ -1,0 +1,11 @@
+---
+- name: Create config dir
+  file: path=/etc/systemd/system/etcd2.service.d state=directory mode=0755
+- name: Writing etcd config file
+  template: src=../templates/listen-address.conf.j2 dest=/etc/systemd/system/etcd2.service.d/40-listen-address.conf mode=0644 
+  register: etcd_conf
+- name: Reloading daemon
+  command: "systemctl daemon-reload"
+  when: etcd_conf.changed
+- name: Enabling etcd
+  service: name=etcd2 state=started enabled=yes

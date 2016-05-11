@@ -1,0 +1,10 @@
+---
+dependencies:
+  - kubernetes-common/flannel
+  - kubernetes-master/certs
+  - kubernetes-master/flannel-config
+  - kubernetes-master/kube-apiserver
+  - kubernetes-master/kube-proxy-master
+  - kubernetes-master/kube-podmaster
+  - kubernetes-master/kube-controller-manager
+  - kubernetes-master/kube-scheduler

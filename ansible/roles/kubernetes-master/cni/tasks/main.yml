@@ -1,0 +1,2 @@
+- name: calico
+  template: src=10-calico.conf.j2 dest=/etc/kubernetes/cni/net.d/10-calico.conf

@@ -1,0 +1,55 @@
+---
+- name: Checking if certs exist
+  stat: path={{ cert_dir }}
+  register: cert_dir_stat
+- name: Create private dir
+  file: path=/home/core/certs state=directory mode=0700
+  when: cert_dir_stat.stat.exists == False
+- name: openssl config template
+  template: src=openssl.cnf.j2 dest={{ cert_dir }}/openssl.cnf mode=0600 
+- name: Creating CA
+  command: "{{ item }} chdir={{ cert_dir }}"
+  with_items:
+    - openssl genrsa -out ca-key.pem 2048
+    - openssl req -x509 -new -nodes -key ca-key.pem -days 10000 -out ca.pem -subj "/CN=kube-ca"
+- name: Creating Server API key
+  command: "{{ item }} chdir={{ cert_dir }}"
+  with_items:
+    - openssl genrsa -out apiserver-key.pem 2048 
+    - openssl req -new -key apiserver-key.pem -out apiserver.csr -subj "/CN=kube-apiserver" -config openssl.cnf
+    - openssl x509 -req -in apiserver.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out apiserver.pem -days 365 -extensions v3_req -extfile openssl.cnf
+- name: openssl worker config template
+  template: src=worker-openssl.cnf.j2 dest={{ cert_dir }}/worker-openssl.cnf mode=0600 
+- name: create SSLs certs for workers (step 1)
+  command: "openssl genrsa -out {{ item.host }}-worker-key.pem 2048 chdir={{ cert_dir }}"
+  with_items: "{{kubernetes_workers}}"
+- name: create SSLs certs for workers (step 2)
+  command: "openssl req -new -key {{ item.host }}-worker-key.pem -out {{ item.host }}-worker.csr -subj '/CN={{ item.host }}' -config worker-openssl.cnf chdir={{ cert_dir }}"
+  environment:
+    WORKER_IP: "{{ item.ip }}"
+  with_items: kubernetes_workers
+- name: create SSLs certs for workers (step 3)
+  command: "openssl x509 -req -in {{ item.host }}-worker.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out {{ item.host }}-worker.pem -days 365 -extensions v3_req -extfile worker-openssl.cnf chdir={{ cert_dir }}"
+  environment:
+    WORKER_IP: "{{ item.ip }}"
+  with_items: kubernetes_workers
+- name: Creating Cluster Administrator Keypair
+  command: "{{ item }} chdir={{ cert_dir }}"
+  with_items:
+    - openssl genrsa -out admin-key.pem 2048
+    - openssl req -new -key admin-key.pem -out admin.csr -subj "/CN=kube-admin"
+    - openssl x509 -req -in admin.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out admin.pem -days 365
+- name: Fetching ssl files
+  fetch: src={{ cert_dir}}/{{ item }} dest=certs/ flat=yes
+  with_items:
+    - ca.pem
+    - apiserver.pem
+    - apiserver-key.pem
+- name: Create kubernetes ssl dir
+  file: path=/etc/kubernetes/ssl state=directory mode=0755
+- name: Copy certs
+  copy: src=certs/{{item.name}} dest=/etc/kubernetes/ssl/{{item.name}} owner=root group=root mode={{ item.mode }}
+  with_items:
+    - { name: 'ca.pem', mode: '0644' }
+    - { name: 'apiserver.pem', mode: '0644' }
+    - { name: 'apiserver-key.pem', mode: '0600' }

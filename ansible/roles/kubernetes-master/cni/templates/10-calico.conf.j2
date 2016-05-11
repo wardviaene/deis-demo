@@ -1,0 +1,15 @@
+{
+    "name": "calico",
+    "type": "flannel",
+    "delegate": {
+        "type": "calico",
+        "etcd_endpoints": "{{kubernetes_etcd_hosts|join(',')}}",
+        "log_level": "none",
+        "log_level_stderr": "info",
+        "hostname": "{{ansible_default_ipv4.address}}",
+        "policy": {
+            "type": "k8s",
+            "k8s_api_root": "http://127.0.0.1:8080/api/v1/"
+        }
+    }
+}

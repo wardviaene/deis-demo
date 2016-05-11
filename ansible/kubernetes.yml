@@ -3,6 +3,12 @@
   gather_facts: False
   roles:
     - defunctzombie.coreos-bootstrap
+  tasks:
+  - name: install httplib2
+    pip: name=httplib2
+
 - hosts: kubernetes-master
+  sudo: yes
   roles:
+    - etcd
     - kubernetes-master

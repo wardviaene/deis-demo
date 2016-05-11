@@ -1,1 +1,56 @@
 - include: certs.yml
+
+- name: Configuring channel network
+  uri: >
+    method=POST
+    url={{ kubernetes_etcd_hosts[0] }}/v2/keys/coreos.com/network/config
+    body='value={"Network":"{{ kubernetes_pod_network }}","Backend":{"Type":"vxlan"}}'
+  register: etcd_post_result
+  failed_when: >
+      not (kube_result.status == 200)
+  changed_when: "kube_result.status == 200"
+
+- name: Starting kubelet service
+  service: name=kubelet state=started enabled=yes
+
+- name: Starting calcio service
+  service: name=calico-node state=started enabled=yes
+
+- name: Waiting for API to start (can take some time)
+  wait_for: host=127.0.0.1 port=8080
+
+- name: Creating Kubernetes namespace
+  uri: >
+    method=POST
+    url=http://127.0.0.1:8080/api/v1/namespaces
+    body='{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"kube-system"}}'
+  register: kube_result
+  failed_when: >
+      not (kube_result.status == 201 or (
+          kube_result.status == 409 and
+          'already exists' in kube_result.json.message))
+  changed_when: "kube_result.status == 201"
+
+- name: Creating Calcio namespace
+  uri: >
+    method=POST
+    url=http://127.0.0.1:8080/api/v1/namespaces
+    body='{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"calico-system"}}'
+  register: kube_result
+  failed_when: >
+      not (kube_result.status == 201 or (
+          kube_result.status == 409 and
+          'already exists' in kube_result.json.message))
+  changed_when: "kube_result.status == 201"
+
+- name: Enable networking
+  uri: >
+    method=POST
+    url=http://127.0.0.1:8080/apis/extensions/v1beta1/namespaces/default/thirdpartyresources
+    body='{ "kind": "ThirdPartyResource", "apiVersion": "extensions/v1beta1", "metadata": { "name": "network-policy.net.alpha.kubernetes.io" }, "description": "Specification for a network isolation policy", "versions": [ { "name": "v1alpha1" } ] }'
+  register: kube_result
+  failed_when: >
+      not (kube_result.status == 201 or (
+          kube_result.status == 409 and
+          'already exists' in kube_result.json.message))
+  changed_when: "kube_result.status == 201"
