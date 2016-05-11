@@ -2,3 +2,4 @@ terraform/terraform.tfvars
 terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 ansible/inventory
+ansible/certs
