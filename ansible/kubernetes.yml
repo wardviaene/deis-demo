@@ -13,12 +13,14 @@
 - hosts: kubernetes-master
   sudo: yes
   roles:
+    - common
     - certs
     - flannel
     - kubernetes-master
 - hosts: kubernetes-workers
   sudo: yes
   roles:
+    - common
     - certs-worker
     - flannel
     - kubernetes-worker

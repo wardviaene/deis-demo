@@ -22,17 +22,17 @@
   template: src=worker-openssl.cnf.j2 dest={{ cert_dir }}/worker-openssl.cnf mode=0600 
 - name: create SSLs certs for workers (step 1)
   command: "openssl genrsa -out {{ item.host }}-worker-key.pem 2048 chdir={{ cert_dir }}"
-  with_items: "{{kubernetes_workers}}"
+  with_items: "{{kubernetes_nodes}}"
 - name: create SSLs certs for workers (step 2)
   command: "openssl req -new -key {{ item.host }}-worker-key.pem -out {{ item.host }}-worker.csr -subj '/CN={{ item.fqdn }}' -config worker-openssl.cnf chdir={{ cert_dir }}"
   environment:
     WORKER_IP: "{{ item.ip }}"
-  with_items: kubernetes_workers
+  with_items: kubernetes_nodes
 - name: create SSLs certs for workers (step 3)
   command: "openssl x509 -req -in {{ item.host }}-worker.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out {{ item.host }}-worker.pem -days 365 -extensions v3_req -extfile worker-openssl.cnf chdir={{ cert_dir }}"
   environment:
     WORKER_IP: "{{ item.ip }}"
-  with_items: kubernetes_workers
+  with_items: kubernetes_nodes
 - name: Creating Cluster Administrator Keypair
   command: "{{ item }} chdir={{ cert_dir }}"
   with_items:
@@ -45,12 +45,14 @@
     - ca.pem
     - apiserver.pem
     - apiserver-key.pem
+    - admin.pem
+    - admin-key.pem
 - name: Fetching worker pems
   fetch: src={{ cert_dir}}/{{ item.host }}-worker.pem dest=certs/ flat=yes
-  with_items: kubernetes_workers
+  with_items: kubernetes_nodes
 - name: Fetching worker keys
   fetch: src={{ cert_dir}}/{{ item.host }}-worker-key.pem dest=certs/ flat=yes
-  with_items: kubernetes_workers
+  with_items: kubernetes_nodes
 - name: Create kubernetes ssl dir
   file: path=/etc/kubernetes/ssl state=directory mode=0755
 - name: Copy certs
