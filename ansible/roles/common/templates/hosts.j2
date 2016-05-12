@@ -1,0 +1,3 @@
+{% for item in kubernetes_nodes %}
+{{ item.ip }} {{ item.fqdn }}
+{% endfor %}

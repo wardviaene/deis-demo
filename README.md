@@ -1,12 +1,40 @@
-# Dokku demo
-* Create terraform.tfvars with:
-  * DO_TOKEN="your token"
-  * PUBLIC_SSH_KEY="path to public ssh key"
-  * PRIVATE_SSH_KEY="path to private ssh key"
-* Use ```terraform apply```
-* go into the app folder
-* git init
-* git remote add dokku dokku@do-ip:dokku-demo
-* git add .
-* git commit -am "app"
-* git push dokku master
+# Deis-workflow v2 demo
+* This is a deis-workflow v2 using Kubernetes on DigitalOcean demo, used in my Online course (www.newtech.academy)
+* terraform scripts to launch instances on DigitalOcean
+* ansible playbook is in ansible
+* provision scripts for Deis can be found in scripts/
+## configuration
+* Create terraform/terraform.tfvars
+DO_TOKEN = "generate new api key and put here"
+PUBLIC_SSH_KEY = "/path/to/.ssh/id_rsa.pub"
+PRIVATE_SSH_KEY = "/path/to/.ssh/id_rsa"
+* Create Ansible inventory file ansible/inventory:
+```
+[coreos]
+ip1
+ip2
+ip3
+
+[etcd-hosts]
+ip1
+
+[kubernetes-master]
+ip1
+
+[kubernetes-workers]
+ip2
+ip3
+
+```
+* Set variables in ansible/group_vars/all
+## how to run
+* Spin up DigitalOcean instances:
+```
+cd terraform
+terraform apply
+```
+* Run the ansible playbook
+```
+cd ansible
+ansible-playbook kubernetes.yml -i inventory
+```
