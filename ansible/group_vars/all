@@ -1,13 +1,15 @@
 ansible_ssh_user: core
 ansible_python_interpreter: "PATH=/home/core/bin:$PATH python"
 cert_dir: /home/core/certs
-kubernetes_workers: [ { host: deis-demo-1.example.com, ip: 10.133.16.205}, { host: deis-demo-2.example.com, ip: 10.133.16.206}, { host: deis-demo-3.example.com, ip: 10.133.17.12}]
+kubernetes_workers:
+ - { host: 128.199.43.172, fqdn: deis-demo-1.example.com, ip: 10.133.16.56}
+ - { host: 128.199.43.124, fqdn: deis-demo-2.example.com, ip: 10.133.16.51}
+ - { host: 128.199.43.61, fqdn: deis-demo-3.example.com, ip: 10.133.16.45}
+kubernetes_master: 10.133.16.56
+kubernetes_etcd_hosts:
+  - http://10.133.16.56:2379
 kubernetes_network_plugin: cni
 kubernetes_version: v1.2.3_coreos.cni.1
-kubernetes_etcd_hosts:
-  - http://10.133.16.205:2379
-  - http://10.133.16.206:2379
-  - http://10.133.17.12:2379
 kubernetes_service_ip_range: 10.3.0.0/24
 kubernetes_pod_network: 10.2.0.0/16
 kubernetes_k8s_service_ip: 10.3.0.1

@@ -1,0 +1,6 @@
+---
+dependencies:
+  - kubernetes-worker/calico
+  - kubernetes-worker/kube-config
+  - kubernetes-worker/kubelet-unit
+  - kubernetes-worker/kube-proxy

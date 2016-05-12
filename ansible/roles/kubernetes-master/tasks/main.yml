@@ -1,15 +1,3 @@
-- name: Configuring channel network
-  uri: >
-    method=POST
-    url={{ kubernetes_etcd_hosts[0] }}/v2/keys/coreos.com/network/config
-    body='value={"Network":"{{ kubernetes_pod_network }}","Backend":{"Type":"vxlan"}}'
-  register: etcd_post_result
-  failed_when: >
-      not (etcd_post_result.status == 201 or (
-          etcd_post_result.status == 409 and
-          'already exists' in etcd_post_result.json.message))
-  changed_when: "etcd_post_result.status == 201"
-
 - name: Starting kubelet service
   service: name=kubelet state=started enabled=yes
 
@@ -26,9 +14,7 @@
     body='{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"kube-system"}}'
   register: kube_result
   failed_when: >
-      not (kube_result.status == 201 or (
-          kube_result.status == 409 and
-          'already exists' in kube_result.json.message))
+      not (kube_result.status == 201 or kube_result.status == 409)
   changed_when: "kube_result.status == 201"
 
 - name: Creating Calcio namespace
@@ -38,9 +24,7 @@
     body='{"apiVersion":"v1","kind":"Namespace","metadata":{"name":"calico-system"}}'
   register: calcio_result
   failed_when: >
-      not (calcio_result.status == 201 or (
-          calcio_result.status == 409 and
-          'already exists' in calcio_result.json.message))
+      not (calcio_result.status == 201 or calcio_result.status == 409)
   changed_when: "calcio_result.status == 201"
 
 - name: Enable networking
@@ -48,9 +32,7 @@
     method=POST
     url=http://127.0.0.1:8080/apis/extensions/v1beta1/namespaces/default/thirdpartyresources
     body='{ "kind": "ThirdPartyResource", "apiVersion": "extensions/v1beta1", "metadata": { "name": "network-policy.net.alpha.kubernetes.io" }, "description": "Specification for a network isolation policy", "versions": [ { "name": "v1alpha1" } ] }'
-  register: kube_result
+  register: net_result
   failed_when: >
-      not (kube_result.status == 201 or (
-          kube_result.status == 409 and
-          'already exists' in kube_result.json.message))
-  changed_when: "kube_result.status == 201"
+      not (net_result.status == 201 or net_result.status == 409)
+  changed_when: "net_result.status == 201"

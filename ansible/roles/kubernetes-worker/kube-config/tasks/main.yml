@@ -1,0 +1,2 @@
+- name: kube-proxy
+  template: src=worker-kubeconfig.yaml.j2 dest=/etc/kubernetes/worker-kubeconfig.yaml

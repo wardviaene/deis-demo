@@ -1,7 +1,5 @@
 ---
 dependencies:
-  - kubernetes-master/certs
-  - kubernetes-master/flannel
   - kubernetes-master/kubelet-master
   - kubernetes-master/kube-apiserver
   - kubernetes-master/kube-proxy

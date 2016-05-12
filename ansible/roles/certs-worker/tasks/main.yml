@@ -1,0 +1,7 @@
+---
+- name: Create kubernetes ssl dir
+  file: path=/etc/kubernetes/ssl state=directory mode=0755
+- name: Copy CA
+  copy: src=certs/{{ ansible_default_ipv4.address }}-worker.pem dest=/etc/kubernetes/ssl/worker.pem owner=root group=root mode=0644
+- name: Copy 
+  copy: src=certs/{{ ansible_default_ipv4.address }}-worker-key.pem dest=/etc/kubernetes/ssl/worker-key.pem owner=root group=root mode=0644

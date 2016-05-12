@@ -1,0 +1,4 @@
+- name: Starting kubelet service
+  service: name=kubelet state=started enabled=yes
+- name: Starting calcio service
+  service: name=calico-node state=started enabled=yes

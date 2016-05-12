@@ -1,0 +1,17 @@
+{
+    "name": "calico",
+    "type": "flannel",
+    "delegate": {
+        "type": "calico",
+        "etcd_endpoints": "{{kubernetes_etcd_hosts|join(',')}}",
+        "log_level": "none",
+        "log_level_stderr": "info",
+        "hostname": "{{ ansible_default_ipv4.address }}",
+        "policy": {
+            "type": "k8s",
+            "k8s_api_root": "https://{{ kubernetes_master }}:443/api/v1/",
+            "k8s_client_key": "/etc/kubernetes/ssl/worker-key.pem",
+            "k8s_client_certificate": "/etc/kubernetes/ssl/worker.pem"
+        }
+    }
+}

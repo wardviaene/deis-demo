@@ -3,15 +3,18 @@ ExecStartPre=/usr/bin/mkdir -p /etc/kubernetes/manifests
 
 Environment=KUBELET_VERSION={{ kubernetes_version }}
 ExecStart=/usr/lib/coreos/kubelet-wrapper \
-  --api-servers=http://127.0.0.1:8080 \
+  --api-servers=https://{{ kubernetes_master }} \
   --network-plugin-dir=/etc/kubernetes/cni/net.d \
-  --network-plugin={{ kubernetes_network_plugin }} \
-  --register-schedulable=false \
+  --network-plugin=cni \
+  --register-node=true \
   --allow-privileged=true \
   --config=/etc/kubernetes/manifests \
   --hostname-override={{ ansible_default_ipv4.address }} \
   --cluster-dns={{ kubernetes_dns_service_ip }} \
-  --cluster-domain=cluster.local
+  --cluster-domain=cluster.local \
+  --kubeconfig=/etc/kubernetes/worker-kubeconfig.yaml \
+  --tls-cert-file=/etc/kubernetes/ssl/worker.pem \
+  --tls-private-key-file=/etc/kubernetes/ssl/worker-key.pem
 Restart=always
 RestartSec=10
 [Install]
