@@ -6,13 +6,10 @@
   tasks:
   - name: install httplib2
     pip: name=httplib2
-- hosts: etcd-hosts
-  sudo: yes
-  roles:
-    - etcd
 - hosts: kubernetes-master
   sudo: yes
   roles:
+    - etcd
     - common
     - certs
     - flannel

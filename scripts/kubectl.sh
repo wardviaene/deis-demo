@@ -1,5 +1,5 @@
 #!/bin/sh
-MASTER_HOST=128.199.43.172
+MASTER_HOST=188.166.0.132
 CA_CERT=~/deis-demo/ansible/certs/ca.pem
 ADMIN_KEY=~/deis-demo/ansible/certs/admin-key.pem
 ADMIN_CERT=~/deis-demo/ansible/certs/admin.pem

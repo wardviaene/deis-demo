@@ -26,12 +26,25 @@ resource "digitalocean_droplet" "deis-demo-3" {
     private_networking = "true"
     ssh_keys = ["${digitalocean_ssh_key.deis-ssh-key.id}"]
 }
+
+resource "digitalocean_droplet" "loadbalancer" {
+    image = "coreos-beta"
+    name = "deis-lb-1"
+    region = "ams3"
+    size = "512mb"
+    private_networking = "true"
+    ssh_keys = ["${digitalocean_ssh_key.deis-ssh-key.id}"]
+}
 output "output-deis-demo-1" {
-  value = "${digitalocean_droplet.deis-demo-1.ipv4_address} - ${digitalocean_droplet.deis-demo-1.ipv4_address_private}"
+  value = "Load balancer: ${digitalocean_droplet.loadbalancer.ipv4_address} - ${digitalocean_droplet.loadbalancer.ipv4_address_private}"
+}
+
+output "output-deis-demo-1" {
+  value = "- { host: ${digitalocean_droplet.deis-demo-1.ipv4_address}, fqdn: ${digitalocean_droplet.deis-demo-1.name}.example.com, ip: ${digitalocean_droplet.deis-demo-1.ipv4_address_private} }"
 }
 output "output-deis-demo-2" {
-  value = "${digitalocean_droplet.deis-demo-2.ipv4_address} - ${digitalocean_droplet.deis-demo-2.ipv4_address_private}"
+  value = "- { host: ${digitalocean_droplet.deis-demo-2.ipv4_address}, fqdn: ${digitalocean_droplet.deis-demo-2.name}.example.com, ip: ${digitalocean_droplet.deis-demo-2.ipv4_address_private} }"
 }
 output "output-deis-demo-3" {
-  value = "${digitalocean_droplet.deis-demo-3.ipv4_address} - ${digitalocean_droplet.deis-demo-3.ipv4_address_private}"
+  value = "- { host: ${digitalocean_droplet.deis-demo-3.ipv4_address}, fqdn: ${digitalocean_droplet.deis-demo-3.name}.example.com, ip: ${digitalocean_droplet.deis-demo-3.ipv4_address_private} }"
 }

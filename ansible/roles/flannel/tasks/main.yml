@@ -6,7 +6,7 @@
     body: "{{lookup('template', '../templates/put-request.j2')}}"
     HEADER_Content-Type: "application/x-www-form-urlencoded"
   register: etcd_result
-
+  changed_when: "etcd_result.status == 201"
 - name: Creating /etc/flannel
   file: path=/etc/flannel state=directory mode=0755
 - name: Creating /etc/systemd/system/flanneld.service.d
