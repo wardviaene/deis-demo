@@ -3,7 +3,7 @@
 * terraform scripts to launch instances on DigitalOcean
 * ansible playbook is in ansible
 * provision scripts for Deis can be found in scripts/
-## configuration
+# configuration
 * Create terraform/terraform.tfvars
 DO_TOKEN = "generate new api key and put here"
 PUBLIC_SSH_KEY = "/path/to/.ssh/id_rsa.pub"
@@ -27,14 +27,33 @@ ip3
 
 ```
 * Set variables in ansible/group_vars/all
-## how to run
+# how to run
 * Spin up DigitalOcean instances:
 ```
-cd terraform
-terraform apply
+$ cd terraform
+$ terraform apply
 ```
 * Run the ansible playbook
 ```
-cd ansible
-ansible-playbook kubernetes.yml -i inventory
+$ cd ansible
+$ ansible-playbook kubernetes.yml -i inventory
+```
+* Install kubectl
+```
+$ scripts/kubectl.sh
+```
+* Install Deis
+```
+$ scripts/install_deis.sh
+```
+* Install Deis client
+```
+$ scripts/install_client.sh
+```
+* Register to Deis and Deploy the app
+```
+$ deis register http://deis.public-ip.xip.io
+$ cd app
+$ deis create
+$ git push deis master
 ```
