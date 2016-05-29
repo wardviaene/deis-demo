@@ -58,9 +58,15 @@ ansible-playbook kubernetes.yml -i inventory --limit loadbalancer-ip
 ```
 * Register to Deis and Deploy the app
 ```
-$ deis register http://deis.public-ip.xip.io
-$ cd app
+$ deis register http://deis.public-ip.nip.io
+$ mv demo-app ../app && cd ../app
+$ git init
+$ git add .
+$ git commit -am "initial commit"
 $ deis create
 $ deis keys:add
+$ ssh-agent bash
+$ ssh-add ~/.ssh/mykey
 $ git push deis master
+$ curl appname.public-ip.nip.io
 ```
