@@ -61,5 +61,6 @@ ansible-playbook kubernetes.yml -i inventory --limit loadbalancer-ip
 $ deis register http://deis.public-ip.xip.io
 $ cd app
 $ deis create
+$ deis keys:add
 $ git push deis master
 ```
