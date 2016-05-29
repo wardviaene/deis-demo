@@ -6,7 +6,7 @@ ADMIN_CERT=~/deis-demo/ansible/certs/admin.pem
 if [ ! -f /usr/local/bin/kubectl ] ; then
   curl -O https://storage.googleapis.com/kubernetes-release/release/v1.2.3/bin/linux/amd64/kubectl
   chmod +x kubectl
-  mv kubectl /usr/local/bin/kubectl
+  sudo mv kubectl /usr/local/bin/kubectl
 fi
 kubectl config set-cluster default-cluster --server=https://${MASTER_HOST} --certificate-authority=${CA_CERT}
 kubectl config set-credentials default-admin --certificate-authority=${CA_CERT} --client-key=${ADMIN_KEY} --client-certificate=${ADMIN_CERT}
