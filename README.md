@@ -17,9 +17,6 @@ ip1
 ip2
 ip3
 
-[etcd-hosts]
-ip1
-
 [kubernetes-master]
 ip1
 
