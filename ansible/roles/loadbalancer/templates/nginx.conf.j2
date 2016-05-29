@@ -44,7 +44,7 @@ stream {
     server {
         listen     2222;
         proxy_pass kubernetes_ssh;
-        proxy_read_timeout 600;
+        proxy_timeout 600s;
     }
 }
 
