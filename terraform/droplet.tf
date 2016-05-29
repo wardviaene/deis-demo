@@ -36,10 +36,6 @@ resource "digitalocean_droplet" "loadbalancer" {
     ssh_keys = ["${digitalocean_ssh_key.deis-ssh-key.id}"]
 }
 output "output-deis-demo-1" {
-  value = "Load balancer: ${digitalocean_droplet.loadbalancer.ipv4_address} - ${digitalocean_droplet.loadbalancer.ipv4_address_private}"
-}
-
-output "output-deis-demo-1" {
   value = "- { host: ${digitalocean_droplet.deis-demo-1.ipv4_address}, fqdn: ${digitalocean_droplet.deis-demo-1.name}.example.com, ip: ${digitalocean_droplet.deis-demo-1.ipv4_address_private} }"
 }
 output "output-deis-demo-2" {
@@ -48,3 +44,8 @@ output "output-deis-demo-2" {
 output "output-deis-demo-3" {
   value = "- { host: ${digitalocean_droplet.deis-demo-3.ipv4_address}, fqdn: ${digitalocean_droplet.deis-demo-3.name}.example.com, ip: ${digitalocean_droplet.deis-demo-3.ipv4_address_private} }"
 }
+
+output "output-deis-lb" {
+  value = "Load balancer: ${digitalocean_droplet.loadbalancer.ipv4_address} - ${digitalocean_droplet.loadbalancer.ipv4_address_private}"
+}
+
