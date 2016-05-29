@@ -23,7 +23,7 @@ http {
 
     upstream kubernetes {
         {% for item in deis_api %}
-        server {{ item }}
+        server {{ item }};
         {% endfor %}
     }
     server {
@@ -38,7 +38,7 @@ http {
 stream {
     upstream kubernetes_ssh {
         {% for item in deis_ssh %}
-        server {{ item }}
+        server {{ item }};
         {% endfor %}
     }
     server {

@@ -4,6 +4,6 @@ if [ ! -f /usr/local/bin/helmc ] ; then
   sudo mv helmc /usr/local/bin/
 fi
 helmc repo add deis https://github.com/deis/charts
-helmc fetch deis/workflow-beta3
-helmc generate -x manifests workflow-beta3
-helmc install workflow-beta3
+helmc fetch deis/workflow-rc1
+helmc generate -x manifests workflow-rc1
+helmc install workflow-rc1

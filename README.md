@@ -49,6 +49,13 @@ $ scripts/install_deis.sh
 ```
 $ scripts/install_client.sh
 ```
+* Start the LB. First find out the EndPoints and change them in config
+```
+kubectl describe service deis-router --namespace=deis
+# edit group_vars/all
+# edit inventory file
+ansible-playbook kubernetes.yml -i inventory --limit loadbalancer-ip
+```
 * Register to Deis and Deploy the app
 ```
 $ deis register http://deis.public-ip.xip.io
